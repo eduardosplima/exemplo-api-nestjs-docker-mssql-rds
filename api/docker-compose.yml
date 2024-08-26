@@ -1,0 +1,40 @@
+networks:
+  dockernet:
+    name: ${APP_NAME}
+volumes:
+  dockervolume:
+    name: ${APP_NAME}-db
+services:
+  api:
+    build:
+      context: .
+      target: builder
+      args:
+        BUILD_CMD: npm run build
+    command: npm run start:debug
+    container_name: ${APP_NAME}
+    env_file: .env
+    image: ${APP_NAME}:latest
+    init: true
+    networks:
+      - dockernet
+    ports:
+      - ${APP_PORT}:3000
+      - ${APP_PORT_DEBUG}:9229
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mssql
+  mssql:
+    container_name: ${APP_NAME}-db
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${MSSQL_PSWD}
+    networks:
+      - dockernet
+    ports:
+      - ${MSSQL_DBEAVER_PORT}:${MSSQL_PORT}
+    volumes:
+      - dockervolume:/var/opt/mssql

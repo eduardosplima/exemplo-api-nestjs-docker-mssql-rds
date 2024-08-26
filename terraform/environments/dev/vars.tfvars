@@ -1,0 +1,10 @@
+aws_region           = "us-east-2"
+db_identifier        = "mssql-teste"
+db_username          = "dba_lord"
+db_name              = "master"
+db_schema            = "tarefasapp"
+db_synchronize       = "true"
+db_instance_class    = "db.t3.small"
+db_allocated_storage = 20
+vpc_id               = "vpc-0399c16721495f557"
+subnet_ids           = ["subnet-06eb21031cbc7ef03", "subnet-0004277e94c6448e0"]
